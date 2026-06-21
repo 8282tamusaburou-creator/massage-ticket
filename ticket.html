@@ -24,7 +24,7 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             text-align: center;
             position: relative;
-            transition: all 0.3s ease; /* 変化をなめらかに */
+            transition: all 0.3s ease;
         }
 
         .ticket h3 {
@@ -63,7 +63,7 @@
             background-color: #ff4757;
         }
 
-        /* ーーー 使用済み（used）になったときのデザイン ーーー */
+        /* 使用済み（used）になったときのデザイン */
         .ticket.used {
             background: #e0e0e0;
             border-color: #999;
@@ -73,7 +73,7 @@
 
         .ticket.used h3, .ticket.used p, .ticket.used .ticket-number {
             color: #777 !important;
-            text-decoration: line-through; /* 文字に打ち消し線を引く */
+            text-decoration: line-through;
         }
 
         .ticket.used .use-button {
@@ -88,42 +88,42 @@
 
     <div class="ticket-container">
 
-        <div class="ticket">
-            <h3>肩たたき券</h3>
-            <p>有効期限：いつでもOK</p>
-            <p>※1回につき15分間、心を込めて揉みます。</p>
+        <div class="ticket" data-id="ticket1">
+            <h3>マッサージ券</h3>
+            <p>有効期限：2026年6月21日からの1年間のみ使用可</p>
+            <p>※1回につき10分間、心を込めて揉みます。1日一枚まで使用可</p>
             <button class="use-button" onclick="useTicket(this)">このチケットを使う</button>
             <div class="ticket-number">No. 001</div>
         </div>
 
-        <div class="ticket">
-            <h3>足つぼマッサージ券</h3>
-            <p>有効期限：疲れたとき</p>
-            <p>※痛気持ちいい強さでマッサージします。</p>
+        <div class="ticket" data-id="ticket2">
+             <h3>マッサージ券</h3>
+            <p>有効期限：2026年6月21日からの1年間のみ使用可</p>
+            <p>※1回につき10分間、心を込めて揉みます。1日一枚まで使用可</p>
             <button class="use-button" onclick="useTicket(this)">このチケットを使う</button>
             <div class="ticket-number">No. 002</div>
         </div>
 
-        <div class="ticket">
-            <h3>ハンドマッサージ券</h3>
-            <p>有効期限：いつでもOK</p>
-            <p>※スマホやPCで疲れた手を癒します。</p>
+        <div class="ticket" data-id="ticket3">
+             <h3>マッサージ券</h3>
+            <p>有効期限：2026年6月21日からの1年間のみ使用可</p>
+            <p>※1回につき10分間、心を込めて揉みます。1日一枚まで使用可</p>
             <button class="use-button" onclick="useTicket(this)">このチケットを使う</button>
             <div class="ticket-number">No. 003</div>
         </div>
 
-        <div class="ticket">
-            <h3>フルコースマッサージ券</h3>
-            <p>有効期限：特別な日用</p>
-            <p>※頭から足まで贅沢に揉みほぐします。</p>
+        <div class="ticket" data-id="ticket4">
+             <h3>マッサージ券</h3>
+            <p>有効期限：2026年6月21日からの1年間のみ使用可</p>
+            <p>※1回につき10分間、心を込めて揉みます。1日一枚まで使用可</p>
             <button class="use-button" onclick="useTicket(this)">このチケットを使う</button>
             <div class="ticket-number">No. 004</div>
         </div>
 
-        <div class="ticket">
-            <h3>おまかせリフレッシュ券</h3>
-            <p>有効期限：いつでもOK</p>
-            <p>※ご希望の場所をどこでも15分揉みます。</p>
+        <div class="ticket" data-id="ticket5">
+            <h3>マッサージ券</h3>
+            <p>有効期限：2026年6月21日からの1年間のみ使用可</p>
+            <p>※1回につき10分間、心を込めて揉みます。1日一枚まで使用可</p>
             <button class="use-button" onclick="useTicket(this)">このチケットを使う</button>
             <div class="ticket-number">No. 005</div>
         </div>
@@ -131,17 +131,36 @@
     </div>
 
     <script>
+        // ーーー ページを開いたときの処理 ーーー
+        window.onload = function() {
+            // すべてのチケットをチェックする
+            const tickets = document.querySelectorAll('.ticket');
+            tickets.forEach(ticket => {
+                const ticketId = ticket.getAttribute('data-id');
+                // もしブラウザの記憶に「使用済み」と残っていたら、見た目を変える
+                if (localStorage.getItem(ticketId) === 'used') {
+                    ticket.classList.add('used');
+                    const button = ticket.querySelector('.use-button');
+                    button.textContent = "使用済み";
+                    button.disabled = true;
+                }
+            });
+        };
+
+        // ーーー ボタンを押したときの処理 ーーー
         function useTicket(button) {
-            // ボタンの親要素（つまり、そのボタンが入っている .ticket）を探す
             const ticket = button.closest('.ticket');
+            const ticketId = ticket.getAttribute('data-id');
             
-            // すでに使用済みでなければ、使用済みに変更する
             if (!ticket.classList.contains('used')) {
                 const confirmUse = confirm("このチケットを使用済みにしますか？");
                 if (confirmUse) {
-                    ticket.classList.add('used'); // 'used' というスタイルを適用する
-                    button.textContent = "使用済み"; // ボタンの文字を変える
-                    button.disabled = true; // ボタンを押せなくする
+                    ticket.classList.add('used');
+                    button.textContent = "使用済み";
+                    button.disabled = true;
+
+                    // ★ブラウザの記憶箱に「この番号は使用済み」と保存する
+                    localStorage.setItem(ticketId, 'used');
                 }
             }
         }
