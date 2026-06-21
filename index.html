@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>デジタルマッサージ券</title>
+    <style>
+        /* チケット全体のデザイン */
+        .ticket-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        /* 1枚のチケットの基本デザイン */
+        .ticket {
+            width: 350px;
+            background: #fff;
+            border: 2px dashed #ff9a9e;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .ticket h3 {
+            margin: 0 0 10px 0;
+            color: #ff6b81;
+            font-size: 24px;
+        }
+
+        .ticket p {
+            margin: 5px 0;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .ticket-number {
+            font-size: 12px;
+            color: #aaa;
+            text-align: right;
+            margin-top: 15px;
+        }
+
+        /* 「使ってみる」ボタンのデザイン */
+        .use-button {
+            background-color: #ff6b81;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .use-button:hover {
+            background-color: #ff4757;
+        }
+
+        /* 使用済み（used）になったときのデザイン */
+        .ticket.used {
+            background: #e0e0e0;
+            border-color: #999;
+            box-shadow: none;
+            opacity: 0.7;
+        }
+
+        .ticket.used h3, .ticket.used p, .ticket.used .ticket-number {
+            color: #777 !important;
+            text-decoration: line-through;
+        }
+
+        .ticket.used .use-button {
+            background-color: #999;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 style="text-align: center; color: #333;">マッサージチケット（5枚綴り）</h1>
+
+    <div class="ticket-container">
+
+        <div class="ticket" data-id="ticket1">
+            <h3>マッサージ券</h3>
+            <p>有効期限：2026年6月21日からの1年間のみ使用可</p>
+            <p>※1回につき10分間、心を込めて揉みます。1日一枚まで使用可</p>
+            <button class="use-button" onclick="useTicket(this)">このチケットを使う</button>
+            <div class="ticket-number">No. 001</div>
+        </div>
+
+        <div class="ticket" data-id="ticket2">
+             <h3>マッサージ券</h3>
+            <p>有効期限：2026年6月21日からの1年間のみ使用可</p>
+            <p>※1回につき10分間、心を込めて揉みます。1日一枚まで使用可</p>
+            <button class="use-button" onclick="useTicket(this)">このチケットを使う</button>
+            <div class="ticket-number">No. 002</div>
+        </div>
+
+        <div class="ticket" data-id="ticket3">
+             <h3>マッサージ券</h3>
+            <p>有効期限：2026年6月21日からの1年間のみ使用可</p>
+            <p>※1回につき10分間、心を込めて揉みます。1日一枚まで使用可</p>
+            <button class="use-button" onclick="useTicket(this)">このチケットを使う</button>
+            <div class="ticket-number">No. 003</div>
+        </div>
+
+        <div class="ticket" data-id="ticket4">
+             <h3>マッサージ券</h3>
+            <p>有効期限：2026年6月21日からの1年間のみ使用可</p>
+            <p>※1回につき10分間、心を込めて揉みます。1日一枚まで使用可</p>
+            <button class="use-button" onclick="useTicket(this)">このチケットを使う</button>
+            <div class="ticket-number">No. 004</div>
+        </div>
+
+        <div class="ticket" data-id="ticket5">
+            <h3>マッサージ券</h3>
+            <p>有効期限：2026年6月21日からの1年間のみ使用可</p>
+            <p>※1回につき10分間、心を込めて揉みます。1日一枚まで使用可</p>
+            <button class="use-button" onclick="useTicket(this)">このチケットを使う</button>
+            <div class="ticket-number">No. 005</div>
+        </div>
+
+    </div>
+
+    <script>
+        // ーーー ページを開いたときの処理 ーーー
+        window.onload = function() {
+            // すべてのチケットをチェックする
+            const tickets = document.querySelectorAll('.ticket');
+            tickets.forEach(ticket => {
+                const ticketId = ticket.getAttribute('data-id');
+                // もしブラウザの記憶に「使用済み」と残っていたら、見た目を変える
+                if (localStorage.getItem(ticketId) === 'used') {
+                    ticket.classList.add('used');
+                    const button = ticket.querySelector('.use-button');
+                    button.textContent = "使用済み";
+                    button.disabled = true;
+                }
+            });
+        };
+
+        // ーーー ボタンを押したときの処理 ーーー
+        function useTicket(button) {
+            const ticket = button.closest('.ticket');
+            const ticketId = ticket.getAttribute('data-id');
+            
+            if (!ticket.classList.contains('used')) {
+                const confirmUse = confirm("このチケットを使用済みにしますか？");
+                if (confirmUse) {
+                    ticket.classList.add('used');
+                    button.textContent = "使用済み";
+                    button.disabled = true;
+
+                    // ★ブラウザの記憶箱に「この番号は使用済み」と保存する
+                    localStorage.setItem(ticketId, 'used');
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>
