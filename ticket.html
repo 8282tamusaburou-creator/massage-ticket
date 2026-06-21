@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>デジタルマッサージ券</title>
+    <style>
+        /* チケット全体のデザイン */
+        .ticket-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        /* 1枚のチケットの基本デザイン */
+        .ticket {
+            width: 350px;
+            background: #fff;
+            border: 2px dashed #ff9a9e;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease; /* 変化をなめらかに */
+        }
+
+        .ticket h3 {
+            margin: 0 0 10px 0;
+            color: #ff6b81;
+            font-size: 24px;
+        }
+
+        .ticket p {
+            margin: 5px 0;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .ticket-number {
+            font-size: 12px;
+            color: #aaa;
+            text-align: right;
+            margin-top: 15px;
+        }
+
+        /* 「使ってみる」ボタンのデザイン */
+        .use-button {
+            background-color: #ff6b81;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .use-button:hover {
+            background-color: #ff4757;
+        }
+
+        /* ーーー 使用済み（used）になったときのデザイン ーーー */
+        .ticket.used {
+            background: #e0e0e0;
+            border-color: #999;
+            box-shadow: none;
+            opacity: 0.7;
+        }
+
+        .ticket.used h3, .ticket.used p, .ticket.used .ticket-number {
+            color: #777 !important;
+            text-decoration: line-through; /* 文字に打ち消し線を引く */
+        }
+
+        .ticket.used .use-button {
+            background-color: #999;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 style="text-align: center; color: #333;">マッサージチケット（5枚綴り）</h1>
+
+    <div class="ticket-container">
+
+        <div class="ticket">
+            <h3>肩たたき券</h3>
+            <p>有効期限：いつでもOK</p>
+            <p>※1回につき15分間、心を込めて揉みます。</p>
+            <button class="use-button" onclick="useTicket(this)">このチケットを使う</button>
+            <div class="ticket-number">No. 001</div>
+        </div>
+
+        <div class="ticket">
+            <h3>足つぼマッサージ券</h3>
+            <p>有効期限：疲れたとき</p>
+            <p>※痛気持ちいい強さでマッサージします。</p>
+            <button class="use-button" onclick="useTicket(this)">このチケットを使う</button>
+            <div class="ticket-number">No. 002</div>
+        </div>
+
+        <div class="ticket">
+            <h3>ハンドマッサージ券</h3>
+            <p>有効期限：いつでもOK</p>
+            <p>※スマホやPCで疲れた手を癒します。</p>
+            <button class="use-button" onclick="useTicket(this)">このチケットを使う</button>
+            <div class="ticket-number">No. 003</div>
+        </div>
+
+        <div class="ticket">
+            <h3>フルコースマッサージ券</h3>
+            <p>有効期限：特別な日用</p>
+            <p>※頭から足まで贅沢に揉みほぐします。</p>
+            <button class="use-button" onclick="useTicket(this)">このチケットを使う</button>
+            <div class="ticket-number">No. 004</div>
+        </div>
+
+        <div class="ticket">
+            <h3>おまかせリフレッシュ券</h3>
+            <p>有効期限：いつでもOK</p>
+            <p>※ご希望の場所をどこでも15分揉みます。</p>
+            <button class="use-button" onclick="useTicket(this)">このチケットを使う</button>
+            <div class="ticket-number">No. 005</div>
+        </div>
+
+    </div>
+
+    <script>
+        function useTicket(button) {
+            // ボタンの親要素（つまり、そのボタンが入っている .ticket）を探す
+            const ticket = button.closest('.ticket');
+            
+            // すでに使用済みでなければ、使用済みに変更する
+            if (!ticket.classList.contains('used')) {
+                const confirmUse = confirm("このチケットを使用済みにしますか？");
+                if (confirmUse) {
+                    ticket.classList.add('used'); // 'used' というスタイルを適用する
+                    button.textContent = "使用済み"; // ボタンの文字を変える
+                    button.disabled = true; // ボタンを押せなくする
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>
